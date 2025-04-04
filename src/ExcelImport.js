@@ -27,21 +27,31 @@ const ExcelImport = ({ uploadHandler }) => {
       setSelectedSheet(workbook.SheetNames[0]);
       
       const ws = workbook.Sheets[workbook.SheetNames[0]];
-      const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
       
       if (jsonData.length) {
         const headers = jsonData[0];
         const rows = jsonData.slice(1);
-        setPreviewData({ headers, rows });
         
-        const data = rows.map(row => {
+        // Ensure all rows have same length as headers
+        const normalizedRows = rows.map(row => {
+          const normalizedRow = [...row];
+          while (normalizedRow.length < headers.length) {
+            normalizedRow.push('');
+          }
+          return normalizedRow;
+        });
+        
+        setPreviewData({ headers, rows: normalizedRows });
+        
+        const formattedData = normalizedRows.map(row => {
           let obj = {};
           headers.forEach((header, index) => {
-            obj[header] = row[index];
+            obj[header] = row[index] || '';
           });
           return obj;
         });
-        uploadHandler(data);
+        uploadHandler(formattedData);
       }
     };
     reader.readAsArrayBuffer(file);
@@ -83,21 +93,31 @@ const ExcelImport = ({ uploadHandler }) => {
       const data = new Uint8Array(e.target.result);
       const workbook = XLSX.read(data, { type: 'array' });
       const ws = workbook.Sheets[sheetName];
-      const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1 });
+      const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
       
       if (jsonData.length) {
         const headers = jsonData[0];
         const rows = jsonData.slice(1);
-        setPreviewData({ headers, rows });
         
-        const data = rows.map(row => {
+        // Ensure all rows have same length as headers
+        const normalizedRows = rows.map(row => {
+          const normalizedRow = [...row];
+          while (normalizedRow.length < headers.length) {
+            normalizedRow.push('');
+          }
+          return normalizedRow;
+        });
+        
+        setPreviewData({ headers, rows: normalizedRows });
+        
+        const formattedData = normalizedRows.map(row => {
           let obj = {};
           headers.forEach((header, index) => {
-            obj[header] = row[index];
+            obj[header] = row[index] || '';
           });
           return obj;
         });
-        uploadHandler(data);
+        uploadHandler(formattedData);
       }
     };
     reader.readAsArrayBuffer(file);
