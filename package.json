@@ -5,24 +5,25 @@
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
+    "file-saver": "2.0.5",
     "react": "16.14.0",
     "react-dom": "16.14.0",
     "react-excel-renderer": "1.1.0",
-    "xlsx": "0.18.5",
-    "file-saver": "2.0.5",
     "react-modal": "3.11.1",
-    "react-scripts": "4.0.3"
+    "react-scripts": "4.0.3",
+    "xlsx": "0.18.5"
   },
   "devDependencies": {
     "@babel/core": "7.16.0",
     "@babel/runtime": "7.16.0",
     "@types/react": "16.9.0",
     "@types/react-dom": "16.9.0",
+    "cross-env": "^7.0.3",
     "typescript": "3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "CI=false react-scripts build",
+    "build": "cross-env NODE_OPTIONS='--openssl-legacy-provider' CI=false react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
