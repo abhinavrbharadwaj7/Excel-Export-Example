@@ -1,40 +1,33 @@
-import React from "react";
-import Workbook from "react-excel-workbook";
+import React from 'react';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
-const ExcelExampleExport = ({ filename, worksheets }) => {
+const ExcelExampleExport = () => {
+  const data = [
+    { name: 'John', age: 30, city: 'New York' },
+    { name: 'Jane', age: 25, city: 'San Francisco' },
+  ];
+
+  const exportToExcel = () => {
+    const ws = XLSX.utils.json_to_sheet(data);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
+    const excelBuffer = XLSX.write(wb, { bookType: 'xlsx', type: 'array' });
+    const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
+    saveAs(dataBlob, 'example.xlsx');
+    
+    // Add page reload after a short delay to ensure file download completes
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
   return (
-    <div className="excel-export-container">
-      <Workbook
-        filename={filename}
-        element={
-          <button className="download-excel-button">
-            <span>Download</span>
-            <img
-              src={
-                "https://cdn3.iconfinder.com/data/icons/logos-brands-3/24/logo_brand_brands_logos_excel-512.png"
-              }
-              alt=""
-            />
-          </button>
-        }
-      >
-        {worksheets.map(({ name, columns, data }) => {
-          return (
-            <Workbook.Sheet name={name} data={data}>
-              {columns.map(({ label, value }) => {
-                return <Workbook.Column label={label} value={value} />;
-              })}
-            </Workbook.Sheet>
-          );
-        })}
-      </Workbook>
+    <div>
+      <h2>Excel Export Example</h2>
+      <button onClick={exportToExcel}>Export to Excel</button>
     </div>
   );
 };
 
 export default ExcelExampleExport;
-
-ExcelExampleExport.defaultProps = {
-  filename: "",
-  worksheets: []
-};

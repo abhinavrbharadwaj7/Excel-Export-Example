@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
-import ExcelRequestsImport from "./ExcelRequestsImport";
+import ExcelImport from "./ExcelImport";
 import ExcelExampleExport from "./ExcelExampleExport";
 
 import "./styles.css";
@@ -32,7 +32,7 @@ const App = () => {
   return (
     <div>
       <ExcelExampleExport filename="requests.xlsx" worksheets={worksheets} />
-      <ExcelRequestsImport uploadHandler={setData} />
+      <ExcelImport uploadHandler={setData} />
       <button onClick={createRequests}>Create</button>
     </div>
   );
