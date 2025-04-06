@@ -143,15 +143,21 @@ const ExcelImport = ({ uploadHandler }) => {
           Drag and drop Excel file here or click to browse
         </div>
       </div>
+
       {sheets.length > 0 && (
-        <div className="sheet-selector">
-          <select value={selectedSheet} onChange={handleSheetChange}>
-            {sheets.map((sheet, index) => (
-              <option key={index} value={sheet}>{sheet}</option>
-            ))}
-          </select>
+        <div className="sheet-tabs">
+          {sheets.map((sheet, index) => (
+            <button
+              key={index}
+              className={`sheet-tab ${selectedSheet === sheet ? 'active' : ''}`}
+              onClick={() => handleSheetChange({ target: { value: sheet } })}
+            >
+              {sheet}
+            </button>
+          ))}
         </div>
       )}
+      
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       
       {previewData && (
