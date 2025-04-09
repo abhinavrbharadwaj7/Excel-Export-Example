@@ -89,17 +89,20 @@ input[type="file"] {
 }
 
 .excel-table {
-  width: 100%;
-  border-collapse: collapse;
+  width: max-content;
+  min-width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
   background-color: white;
 }
 
 .excel-table-wrapper {
   margin: 15px 0px;
   max-height: 400px;
-  overflow-y: auto;
+  overflow: auto;
   border: 1px solid #ddd;
   border-radius: 4px;
+  position: relative;
 }
 
 .excel-table th,
@@ -113,11 +116,31 @@ input[type="file"] {
   background-color: #f5f6fa;
   position: sticky;
   top: 0;
+  z-index: 2;
+}
+
+.excel-table th .column-header {
+  color: #666;
+  font-size: 12px;
+  margin-bottom: 4px;
+  border-bottom: 1px dashed #ddd;
+}
+
+.excel-table .row-header {
+  position: sticky;
+  left: 0;
   z-index: 1;
+  background-color: #f5f6fa;
+  color: #666;
+  font-size: 12px;
+  font-weight: normal;
+  text-align: center;
+  min-width: 30px;
+  border-right: 2px solid #ddd;
 }
 
 .excel-table tr:first-of-type {
-  display: none;
+  display: table-row;
 }
 
 .excel-table tr {
@@ -139,6 +162,33 @@ input[type="file"] {
 
 .excel-table td {
   padding: 5px 10px;
+}
+
+.excel-table .column-cell {
+  padding: 4px 8px;
+  position: relative;
+}
+
+.excel-table .column-letter {
+  color: #666;
+  font-size: 12px;
+  font-weight: normal;
+  border-bottom: 1px dashed #ddd;
+  margin-bottom: 4px;
+  padding: 2px 0;
+}
+
+.excel-table .header-content {
+  font-weight: bold;
+  color: #333;
+}
+
+.excel-table .corner-header {
+  z-index: 3;
+  left: 0;
+  background-color: #f8f9fa;
+  border-right: 2px solid #ddd;
+  border-bottom: 2px solid #ddd;
 }
 
 .file-upload {

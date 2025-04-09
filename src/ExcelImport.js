@@ -165,14 +165,23 @@ const ExcelImport = ({ uploadHandler }) => {
           <table className="excel-table">
             <thead>
               <tr>
+                <th className="row-header corner-header">#</th>
                 {previewData.headers.map((header, index) => (
-                  <th key={index}>{header}</th>
+                  <th key={index} className="column-cell">
+                    <div className="column-letter">
+                      {String.fromCharCode(65 + index)}
+                    </div>
+                    <div className="header-content">
+                      {header}
+                    </div>
+                  </th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {previewData.rows.map((row, rowIndex) => (
                 <tr key={rowIndex}>
+                  <td className="row-header">{rowIndex + 1}</td>
                   {row.map((cell, cellIndex) => (
                     <td key={cellIndex}>{cell}</td>
                   ))}
