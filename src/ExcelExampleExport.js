@@ -28,7 +28,7 @@ const ExcelExampleExport = () => {
 
   return (
     <div>
-      <h2 style={{ cursor: 'pointer' }} onClick={handleTitleClick}>Excel Export Example</h2>
+      <h2 style={{ cursor: 'pointer' }} onClick={handleTitleClick}>ExcelRenderer</h2>
       <button onClick={exportToExcel}>Export to Excel</button>
     </div>
   );
