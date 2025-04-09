@@ -22,9 +22,13 @@ const ExcelExampleExport = () => {
     }, 1000);
   };
 
+  const handleTitleClick = () => {
+    window.location.reload();
+  };
+
   return (
     <div>
-      <h2>Excel Export Example</h2>
+      <h2 style={{ cursor: 'pointer' }} onClick={handleTitleClick}>Excel Export Example</h2>
       <button onClick={exportToExcel}>Export to Excel</button>
     </div>
   );
