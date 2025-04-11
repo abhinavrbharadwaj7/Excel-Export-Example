@@ -4,7 +4,9 @@ import { Dialog, DialogContent, DialogTitle, IconButton, AppBar, Toolbar, Typogr
 import CloseIcon from '@mui/icons-material/Close';
 import PreviewIcon from '@mui/icons-material/Visibility';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import TableChartIcon from '@mui/icons-material/TableChart';
 import { keyframes } from '@mui/system';
+import LoadingSpinner from './components/LoadingSpinner';
 
 const ExcelImport = ({ uploadHandler }) => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -13,15 +15,19 @@ const ExcelImport = ({ uploadHandler }) => {
   const [selectedSheet, setSelectedSheet] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [openPreview, setOpenPreview] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleFile = useCallback((file) => {
+    setIsLoading(true);
     if (!file) {
       setErrorMessage('No file uploaded!');
+      setIsLoading(false);
       return;
     }
 
     if (!(file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' || file.type === 'application/vnd.ms-excel')) {
       setErrorMessage('Unknown file format. Only Excel files are supported.');
+      setIsLoading(false);
       return;
     }
 
@@ -67,6 +73,7 @@ const ExcelImport = ({ uploadHandler }) => {
         });
         uploadHandler(formattedData);
       }
+      setIsLoading(false);
     };
     reader.readAsArrayBuffer(file);
   }, []);
@@ -98,6 +105,7 @@ const ExcelImport = ({ uploadHandler }) => {
   };
 
   const handleSheetChange = (event) => {
+    setIsLoading(true);
     const sheetName = event.target.value;
     setSelectedSheet(sheetName);
 
@@ -112,17 +120,19 @@ const ExcelImport = ({ uploadHandler }) => {
       if (jsonData.length) {
         const headers = jsonData[0];
         const rows = jsonData.slice(1);
-
         setPreviewData({ headers, rows, file: data });
       }
+      setTimeout(() => {
+        setIsLoading(false);
+      }, 500); // Add slight delay to show loading animation
     };
     reader.readAsArrayBuffer(file);
   };
 
   const handlePreviewOpen = () => setOpenPreview(true);
   const handlePreviewClose = () => {
+    setIsLoading(true);
     setOpenPreview(false);
-    // Add reload after dialog closes
     setTimeout(() => {
       window.location.reload();
     }, 300);
@@ -150,12 +160,35 @@ const ExcelImport = ({ uploadHandler }) => {
       onClose={handlePreviewClose}
       sx={{ '& .MuiDialog-paper': { bgcolor: '#f5f5f5' } }}
     >
-      <AppBar sx={{ position: 'relative', bgcolor: 'white', color: 'black' }}>
+      <AppBar 
+        sx={{ 
+          position: 'relative',
+          background: 'rgba(255, 255, 255, 0.7)',
+          backdropFilter: 'blur(10px)',
+          boxShadow: '0 4px 30px rgba(0, 0, 0, 0.1)',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.3)'
+        }}
+      >
         <Toolbar>
-          <Typography sx={{ flex: 1 }} variant="h6">
+          <TableChartIcon sx={{ mr: 2, color: '#1a73e8' }} />
+          <Typography 
+            variant="h6" 
+            sx={{ 
+              flex: 1,
+              cursor: 'pointer',
+              color: '#1a73e8',
+              fontWeight: 600,
+              '&:hover': { 
+                opacity: 0.8,
+                transform: 'scale(1.01)',
+                transition: 'all 0.2s ease-in-out'
+              }
+            }}
+            onClick={handlePreviewClose}
+          >
             Excel Preview
           </Typography>
-          <IconButton edge="end" color="inherit" onClick={handlePreviewClose}>
+          <IconButton edge="end" sx={{ color: '#1a73e8' }} onClick={handlePreviewClose}>
             <CloseIcon />
           </IconButton>
         </Toolbar>
@@ -209,6 +242,7 @@ const ExcelImport = ({ uploadHandler }) => {
 
   return (
     <Box className="excel-import-container" sx={{ p: 3 }}>
+      {isLoading && <LoadingSpinner />}
       <Typography 
         variant="h4" 
         gutterBottom

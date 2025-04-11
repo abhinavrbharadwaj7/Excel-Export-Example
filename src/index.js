@@ -74,21 +74,6 @@ const App = () => {
       <Container maxWidth="md" sx={{ mt: 4 }}>
         <Stack spacing={4}>
           <Paper 
-            elevation={0} 
-            sx={{ 
-              p: 3, 
-              backgroundColor: '#f8f9fa',
-              borderRadius: '16px',
-              transition: 'transform 0.2s ease-in-out',
-              '&:hover': {
-                transform: 'scale(1.01)'
-              }
-            }}
-          >
-            <ExcelExampleExport filename="requests.xlsx" worksheets={worksheets} />
-          </Paper>
-
-          <Paper 
             elevation={2} 
             sx={{ 
               p: 0, 
@@ -99,6 +84,7 @@ const App = () => {
             <ExcelImport uploadHandler={setData} />
           </Paper>
         </Stack>
+        <ExcelExampleExport filename="requests.xlsx" worksheets={worksheets} />
       </Container>
     </Box>
   );
