@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import * as XLSX from 'xlsx';
-import { Dialog, DialogContent, DialogTitle, IconButton, AppBar, Toolbar, Typography, Box, Paper } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton, AppBar, Toolbar, Typography, Box, Paper, Button } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PreviewIcon from '@mui/icons-material/Visibility';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { keyframes } from '@mui/system';
 
 const ExcelImport = ({ uploadHandler }) => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -126,6 +127,21 @@ const ExcelImport = ({ uploadHandler }) => {
       window.location.reload();
     }, 300);
   };
+
+  const rippleAnimation = keyframes`
+    0% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(26, 115, 232, 0.3);
+    }
+    70% {
+      transform: scale(1);
+      box-shadow: 0 0 0 10px rgba(26, 115, 232, 0);
+    }
+    100% {
+      transform: scale(0.95);
+      box-shadow: 0 0 0 0 rgba(26, 115, 232, 0);
+    }
+  `;
 
   const PreviewDialog = () => (
     <Dialog
@@ -270,15 +286,34 @@ const ExcelImport = ({ uploadHandler }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
       {previewData && (
-        <div>
-          <button 
-            className="preview-button"
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+          <Button
+            variant="contained"
+            startIcon={<PreviewIcon />}
             onClick={handlePreviewOpen}
+            sx={{
+              background: 'linear-gradient(45deg, #1a73e8 30%, #2196F3 90%)',
+              boxShadow: '0 3px 5px 2px rgba(33, 150, 243, .3)',
+              color: 'white',
+              padding: '10px 30px',
+              borderRadius: '25px',
+              fontWeight: 600,
+              transition: 'all 0.3s ease',
+              animation: `${rippleAnimation} 1.5s infinite`,
+              '&:hover': {
+                background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+                transform: 'translateY(-2px)',
+                boxShadow: '0 6px 10px 2px rgba(33, 150, 243, .3)',
+              },
+              '&:active': {
+                transform: 'translateY(1px)',
+              }
+            }}
           >
-            <PreviewIcon /> Preview File
-          </button>
+            Preview File
+          </Button>
           <PreviewDialog />
-        </div>
+        </Box>
       )}
     </Box>
   );
