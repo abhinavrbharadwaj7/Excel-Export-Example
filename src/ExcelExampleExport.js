@@ -31,12 +31,19 @@ const ExcelExampleExport = () => {
   return (
     <Box sx={{ textAlign: 'center' }}>
       <Typography 
-        variant="h5" 
+        variant="h4" 
         gutterBottom
         sx={{ 
           cursor: 'pointer',
-          color: '#1a73e8',
-          '&:hover': { color: '#1557b0' }
+          background: 'linear-gradient(45deg, #1a73e8 30%, #2196F3 90%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 700,
+          mb: 3,
+          '&:hover': { 
+            transform: 'scale(1.01)',
+            transition: 'transform 0.2s ease-in-out'
+          }
         }} 
         onClick={handleTitleClick}
       >
@@ -47,8 +54,14 @@ const ExcelExampleExport = () => {
         startIcon={<FileDownloadIcon />}
         onClick={exportToExcel}
         sx={{
-          backgroundColor: '#10ad4c',
-          '&:hover': { backgroundColor: '#0d8c3e' }
+          background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
+          boxShadow: '0 3px 5px 2px rgba(33, 203, 243, .3)',
+          color: 'white',
+          padding: '10px 30px',
+          '&:hover': {
+            background: 'linear-gradient(45deg, #1a73e8 30%, #2196F3 90%)',
+            transform: 'translateY(-1px)'
+          }
         }}
       >
         Export to Excel

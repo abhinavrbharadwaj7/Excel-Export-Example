@@ -1,8 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import * as XLSX from 'xlsx';
-import { Dialog, DialogContent, DialogTitle, IconButton, AppBar, Toolbar, Typography } from '@mui/material';
+import { Dialog, DialogContent, DialogTitle, IconButton, AppBar, Toolbar, Typography, Box, Paper } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import PreviewIcon from '@mui/icons-material/Visibility';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 
 const ExcelImport = ({ uploadHandler }) => {
   const [errorMessage, setErrorMessage] = useState('');
@@ -191,25 +192,66 @@ const ExcelImport = ({ uploadHandler }) => {
   );
 
   return (
-    <div className="excel-import-container">
-      <h2>Import Excel File</h2>
-      <div
+    <Box className="excel-import-container" sx={{ p: 3 }}>
+      <Typography 
+        variant="h4" 
+        gutterBottom
+        sx={{ 
+          background: 'linear-gradient(45deg, #1a73e8 30%, #2196F3 90%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          fontWeight: 700,
+          mb: 3,
+          textAlign: 'center'
+        }}
+      >
+        Import Excel File
+      </Typography>
+      
+      <Paper
+        elevation={0}
         className={`file-upload-area ${isDragging ? 'dragging' : ''}`}
         onDrop={handleDrop}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
+        sx={{
+          border: '2px dashed #1a73e8',
+          borderRadius: 2,
+          p: 3,
+          textAlign: 'center',
+          backgroundColor: isDragging ? 'rgba(26, 115, 232, 0.1)' : 'transparent',
+          transition: 'all 0.3s ease',
+          minHeight: '200px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center'
+        }}
       >
-        <div className="file-upload">
+        <Box className="file-upload">
           <input
             type="file"
             onChange={fileHandler}
             accept=".xlsx, .xls"
+            style={{ display: 'none' }}
+            id="excel-file-input"
           />
-        </div>
-        <div className="drag-drop-text">
-          Drag and drop Excel file here or click to browse
-        </div>
-      </div>
+          <label htmlFor="excel-file-input" style={{ width: '100%' }}>
+            <Box sx={{ 
+              display: 'flex', 
+              flexDirection: 'column', 
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: 2,
+              cursor: 'pointer'
+            }}>
+              <CloudUploadIcon sx={{ fontSize: 48, color: '#1a73e8' }} />
+              <Typography variant="body1" color="textSecondary">
+                Drag and drop Excel file here or click to browse
+              </Typography>
+            </Box>
+          </label>
+        </Box>
+      </Paper>
 
       {sheets.length > 0 && (
         <div className="sheet-tabs">
@@ -228,7 +270,7 @@ const ExcelImport = ({ uploadHandler }) => {
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
 
       {previewData && (
-        <>
+        <div>
           <button 
             className="preview-button"
             onClick={handlePreviewOpen}
@@ -236,9 +278,9 @@ const ExcelImport = ({ uploadHandler }) => {
             <PreviewIcon /> Preview File
           </button>
           <PreviewDialog />
-        </>
+        </div>
       )}
-    </div>
+    </Box>
   );
 };
 
