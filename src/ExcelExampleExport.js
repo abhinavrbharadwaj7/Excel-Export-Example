@@ -1,6 +1,8 @@
 import React from 'react';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Button, Typography, Box } from '@mui/material';
+import FileDownloadIcon from '@mui/icons-material/FileDownload';
 
 const ExcelExampleExport = () => {
   const data = [
@@ -27,10 +29,31 @@ const ExcelExampleExport = () => {
   };
 
   return (
-    <div>
-      <h2 style={{ cursor: 'pointer' }} onClick={handleTitleClick}>ExcelRenderer</h2>
-      <button onClick={exportToExcel}>Export to Excel</button>
-    </div>
+    <Box sx={{ textAlign: 'center' }}>
+      <Typography 
+        variant="h5" 
+        gutterBottom
+        sx={{ 
+          cursor: 'pointer',
+          color: '#1a73e8',
+          '&:hover': { color: '#1557b0' }
+        }} 
+        onClick={handleTitleClick}
+      >
+        Excel Export Example
+      </Typography>
+      <Button
+        variant="contained"
+        startIcon={<FileDownloadIcon />}
+        onClick={exportToExcel}
+        sx={{
+          backgroundColor: '#10ad4c',
+          '&:hover': { backgroundColor: '#0d8c3e' }
+        }}
+      >
+        Export to Excel
+      </Button>
+    </Box>
   );
 };
 
