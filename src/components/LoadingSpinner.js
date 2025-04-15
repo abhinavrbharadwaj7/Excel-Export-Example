@@ -8,14 +8,9 @@ const rotate = keyframes`
 `;
 
 const wave = keyframes`
-   0% { transform: translateY(0); }
-   50% { transform: translateY(-10px); }
-   100% { transform: translateY(0); }
-`;
-
-const glow = keyframes`
-  0%, 100% { filter: drop-shadow(0 0 8px rgba(26, 115, 232, 0.6)); }
-  50% { filter: drop-shadow(0 0 15px rgba(26, 115, 232, 0.8)); }
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
 `;
 
 const LoadingSpinner = () => (
@@ -30,7 +25,7 @@ const LoadingSpinner = () => (
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      background: 'rgba(255, 255, 255, 0.95)',
+      background: 'rgba(255, 255, 255, 0.9)',
       backdropFilter: 'blur(8px)',
       zIndex: 9999,
     }}
@@ -45,42 +40,35 @@ const LoadingSpinner = () => (
         alignItems: 'center',
       }}
     >
-      {/* Single rotating ring */}
       <Box
         sx={{
           position: 'absolute',
-          width: '100%',
-          height: '100%',
-          border: '3px solid transparent',
-          borderTop: '3px solid #1a73e8',
-          borderRight: '3px solid #1a73e8',
+          width: '60px',
+          height: '60px',
+          border: '4px solid transparent',
+          borderTop: '4px solid #1a73e8',
           borderRadius: '50%',
-          animation: `${rotate} 1.5s linear infinite`,
+          animation: `${rotate} 1s linear infinite`,
         }}
       />
-
-      {/* Center icon */}
       <TableChartIcon
         sx={{
-          fontSize: '35px',
+          fontSize: '30px',
           color: '#1a73e8',
-          animation: `${wave} 1.5s ease-in-out infinite, ${glow} 2s ease-in-out infinite`,
+          animation: `${wave} 1s ease-in-out infinite`,
         }}
       />
     </Box>
-
     <Box
       sx={{
         marginTop: '20px',
-        fontSize: '16px',
+        color: '#1a73e8',
         fontWeight: 500,
-        background: 'linear-gradient(45deg, #1a73e8, #2196F3)',
-        WebkitBackgroundClip: 'text',
-        WebkitTextFillColor: 'transparent',
-        animation: `${wave} 1.5s ease-in-out infinite`,
+        animation: `${wave} 1s ease-in-out infinite`,
+        animationDelay: '0.1s',
       }}
     >
-      Processing...
+      Loading...
     </Box>
   </Box>
 );
