@@ -242,7 +242,7 @@ const ExcelImport = ({ uploadHandler }) => {
 
       sheetContents += `
         <div id="sheet-content-${idx}" style="display:${idx === 0 ? 'block' : 'none'};height:100vh;overflow:auto;">
-          <div class="excel-table-wrapper preview-mode" style="height:calc(100vh - 80px);max-height:none;">
+          <div class="excel-table-wrapper preview-mode" style="height:calc(100vh - 80px);max-height:none;overflow:auto;overflow-x:auto;">
             <table class="excel-table" style="min-width:100%;width:max-content;">
               <thead>
                 <tr>
@@ -288,7 +288,7 @@ const ExcelImport = ({ uploadHandler }) => {
             .sheet-tab.active, .sheet-tab:focus { font-weight: bold; background: #e3f2fd; outline: none; }
             .sheet-tabs-bar { margin-bottom: 0; }
             .excel-table { width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 0; background-color: white; }
-            .excel-table-wrapper { margin: 15px 0px; height: calc(100vh - 80px); max-height: none; overflow: auto; border: 1px solid #ddd; border-radius: 4px; position: relative; }
+            .excel-table-wrapper { margin: 15px 0px; height: calc(100vh - 80px); max-height: none; overflow: auto; overflow-x: auto; border: 1px solid #ddd; border-radius: 4px; position: relative; }
             .excel-table th, .excel-table td { padding: 8px; border: 1px solid #ddd; text-align: left; }
             .excel-table th { background-color: #f5f6fa; position: sticky; top: 0; z-index: 2; }
             .excel-table .row-header { position: sticky; left: 0; z-index: 1; background-color: #f5f6fa; color: #666; font-size: 12px; font-weight: normal; text-align: center; min-width: 30px; border-right: 2px solid #ddd; }
