@@ -241,8 +241,8 @@ const ExcelImport = ({ uploadHandler }) => {
       sheetTabs += `<button class="sheet-tab" id="tab-${idx}" onclick="showSheet(${idx})" style="margin-right:8px;${idx === 0 ? 'font-weight:bold;background:#e3f2fd;' : ''}">${sheet}</button>`;
 
       sheetContents += `
-        <div id="sheet-content-${idx}" style="display:${idx === 0 ? 'block' : 'none'};height:100vh;overflow:auto;">
-          <div class="excel-table-wrapper preview-mode" style="height:calc(100vh - 80px);max-height:none;overflow:auto;overflow-x:auto;">
+        <div id="sheet-content-${idx}" style="display:${idx === 0 ? 'block' : 'none'};">
+          <div class="excel-table-wrapper preview-mode" style="height:600px;max-height:600px;overflow:auto;overflow-x:auto;">
             <table class="excel-table" style="min-width:100%;width:max-content;">
               <thead>
                 <tr>
@@ -283,12 +283,22 @@ const ExcelImport = ({ uploadHandler }) => {
           <title>Excel Preview</title>
           <style>
             html, body { height: 100%; margin: 0; padding: 0; }
-            body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f7fa; height: 100vh; width: 100vw; overflow: hidden; }
+            body { font-family: Arial, sans-serif; margin: 0; padding: 0; background: #f5f7fa; height: 100vh; width: 100vw; overflow: auto; }
+            .frame-container {
+              margin: 40px auto 0 auto;
+              background: #fff;
+              border-radius: 12px;
+              box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+              padding: 32px 24px 24px 24px;
+              width: 90vw;
+              max-width: 1100px;
+              min-width: 320px;
+            }
             .sheet-tab { padding: 8px 16px; border: none; border-radius: 4px 4px 0 0; background: #f5f5f5; cursor: pointer; margin-bottom: 0; }
             .sheet-tab.active, .sheet-tab:focus { font-weight: bold; background: #e3f2fd; outline: none; }
             .sheet-tabs-bar { margin-bottom: 0; }
             .excel-table { width: max-content; min-width: 100%; border-collapse: separate; border-spacing: 0; background-color: white; }
-            .excel-table-wrapper { margin: 15px 0px; height: calc(100vh - 80px); max-height: none; overflow: auto; overflow-x: auto; border: 1px solid #ddd; border-radius: 4px; position: relative; }
+            .excel-table-wrapper { margin: 15px 0px; height: 600px; max-height: 600px; overflow: auto; overflow-x: auto; border: 1px solid #ddd; border-radius: 4px; position: relative; }
             .excel-table th, .excel-table td { padding: 8px; border: 1px solid #ddd; text-align: left; }
             .excel-table th { background-color: #f5f6fa; position: sticky; top: 0; z-index: 2; }
             .excel-table .row-header { position: sticky; left: 0; z-index: 1; background-color: #f5f6fa; color: #666; font-size: 12px; font-weight: normal; text-align: center; min-width: 30px; border-right: 2px solid #ddd; }
@@ -304,15 +314,17 @@ const ExcelImport = ({ uploadHandler }) => {
             .excel-table .corner-header { z-index: 3; left: 0; background-color: #f8f9fa; border-right: 2px solid #ddd; border-bottom: 2px solid #ddd; }
           </style>
         </head>
-        <body style="height:100vh;width:100vw;overflow:hidden;">
-          <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-            <svg style="width:28px;height:28px;color:#1a73e8" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19M17,17H7V7H17V17Z" />
-            </svg>
-            <span style="color:#1a73e8;font-size:22px;font-weight:600;">Excel Processor</span>
+        <body>
+          <div class="frame-container">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+              <svg style="width:28px;height:28px;color:#1a73e8" viewBox="0 0 24 24">
+                <path fill="currentColor" d="M19,3H5C3.89,3 3,3.89 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V5C21,3.89 20.1,3 19,3M19,19H5V5H19V19M17,17H7V7H17V17Z" />
+              </svg>
+              <span style="color:#1a73e8;font-size:22px;font-weight:600;">Excel Processor</span>
+            </div>
+            <div class="sheet-tabs-bar">${sheetTabs}</div>
+            ${sheetContents}
           </div>
-          <div class="sheet-tabs-bar">${sheetTabs}</div>
-          ${sheetContents}
           <script>
             function showSheet(idx) {
               var total = ${sheetNames.length};
