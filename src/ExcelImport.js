@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import * as XLSX from 'xlsx';
-import { Typography, Box, Paper, Button, Modal, IconButton } from '@mui/material';
+import { Typography, Box, Paper, Button } from '@mui/material';
 import PreviewIcon from '@mui/icons-material/Visibility';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import CloseIcon from '@mui/icons-material/Close';
 import { keyframes } from '@mui/system';
 import LoadingSpinner from './components/LoadingSpinner';
 
@@ -14,8 +13,6 @@ const ExcelImport = ({ uploadHandler }) => {
   const [selectedSheet, setSelectedSheet] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [modalOpen, setModalOpen] = useState(false);
-  const [activeSheetIdx, setActiveSheetIdx] = useState(0);
 
   const handleFile = useCallback((file) => {
     setIsLoading(true);
@@ -270,112 +267,6 @@ const ExcelImport = ({ uploadHandler }) => {
     newWindow.document.close();
   };
 
-  const openFileInModal = () => setModalOpen(true);
-  const closeFileModal = () => setModalOpen(false);
-
-  const renderExcelPreview = () => {
-    if (!previewData || !sheets.length) return null;
-    const workbook = XLSX.read(previewData.file, { type: 'array' });
-
-    return (
-      <Box
-        sx={{
-          width: '95vw',
-          maxWidth: '1400px',
-          maxHeight: '85vh',
-          bgcolor: 'background.paper',
-          borderRadius: 3,
-          boxShadow: 24,
-          p: 3,
-          position: 'relative',
-          overflow: 'hidden',
-        }}
-      >
-        <IconButton
-          onClick={closeFileModal}
-          sx={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            zIndex: 10,
-            color: '#1a73e8',
-            background: '#f5f5f5',
-            '&:hover': { background: '#e3f2fd' }
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-          <PreviewIcon sx={{ color: '#1a73e8', mr: 1 }} />
-          <Typography variant="h6" sx={{ color: '#1a73e8', fontWeight: 700 }}>
-            Excel Preview
-          </Typography>
-        </Box>
-        <Box sx={{ display: 'flex', gap: 1, mb: 2, overflowX: 'auto' }}>
-          {sheets.map((sheet, idx) => (
-            <Button
-              key={sheet}
-              variant={activeSheetIdx === idx ? "contained" : "outlined"}
-              size="small"
-              sx={{
-                background: activeSheetIdx === idx ? 'linear-gradient(45deg, #1a73e8 30%, #2196F3 90%)' : '#f5f5f5',
-                color: activeSheetIdx === idx ? 'white' : '#1a73e8',
-                fontWeight: 600,
-                borderRadius: 2,
-                minWidth: 100,
-                border: activeSheetIdx === idx ? 'none' : '1px solid #e3f2fd',
-                boxShadow: activeSheetIdx === idx ? 2 : 0,
-                '&:hover': {
-                  background: activeSheetIdx === idx
-                    ? 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)'
-                    : '#e3f2fd'
-                }
-              }}
-              onClick={() => setActiveSheetIdx(idx)}
-            >
-              {sheet}
-            </Button>
-          ))}
-        </Box>
-        <Box sx={{ maxHeight: 'calc(85vh - 140px)', overflow: 'auto' }}>
-          {(() => {
-            const ws = workbook.Sheets[sheets[activeSheetIdx]];
-            const jsonData = XLSX.utils.sheet_to_json(ws, { header: 1, defval: '' });
-            const headers = jsonData[0] || [];
-            const rows = jsonData.slice(1);
-            const colLetters = headers.map((_, i) => String.fromCharCode(65 + i));
-
-            return (
-              <table className="excel-table" style={{ width: '100%' }}>
-                <thead>
-                  <tr>
-                    <th className="row-header corner-header">#</th>
-                    {headers.map((header, i) => (
-                      <th key={i} className="column-cell">
-                        <div className="column-letter">{colLetters[i]}</div>
-                        <div className="header-content">{header}</div>
-                      </th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      <td className="row-header">{rowIndex + 1}</td>
-                      {row.map((cell, cellIndex) => (
-                        <td key={cellIndex}>{cell}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            );
-          })()}
-        </Box>
-      </Box>
-    );
-  };
-
   const rippleAnimation = keyframes`
     0% {
       transform: scale(0.95);
@@ -454,11 +345,11 @@ const ExcelImport = ({ uploadHandler }) => {
       </Paper>
       {errorMessage && <p style={{ color: 'red' }}>{errorMessage}</p>}
       {previewData && (
-        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2, gap: 2 }}>
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
           <Button
             variant="contained"
             startIcon={<PreviewIcon />}
-            onClick={openFileInModal}
+            onClick={openFileInNewTab}
             sx={{
               background: 'linear-gradient(45deg, #1a73e8 30%, #2196F3 90%)',
               boxShadow: '0 3px 5px 2px rgba(33, 150, 243, .3)',
@@ -478,43 +369,8 @@ const ExcelImport = ({ uploadHandler }) => {
               }
             }}
           >
-            View as Google Preview
+            View File
           </Button>
-          <Button
-            variant="outlined"
-            startIcon={<PreviewIcon />}
-            onClick={openFileInNewTab}
-            sx={{
-              color: '#1a73e8',
-              borderColor: '#1a73e8',
-              fontWeight: 600,
-              padding: '10px 30px',
-              borderRadius: '25px',
-              background: 'white',
-              transition: 'all 0.3s ease',
-              '&:hover': {
-                background: '#e3f2fd',
-                borderColor: '#2196F3',
-                color: '#2196F3'
-              }
-            }}
-          >
-            View in New Tab
-          </Button>
-          <Modal
-            open={modalOpen}
-            onClose={closeFileModal}
-            aria-labelledby="excel-preview-modal"
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              zIndex: 2000,
-              background: 'rgba(0,0,0,0.25)'
-            }}
-          >
-            {renderExcelPreview()}
-          </Modal>
         </Box>
       )}
     </Box>
