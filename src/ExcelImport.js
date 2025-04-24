@@ -238,6 +238,45 @@ const ExcelImport = ({ uploadHandler }) => {
             .excel-table .column-letter { color: #666; font-size: 12px; font-weight: normal; border-bottom: 1px dashed #ddd; margin-bottom: 4px; padding: 2px 0; }
             .excel-table .header-content { font-weight: bold; color: #333; }
             .excel-table .corner-header { z-index: 3; left: 0; background-color: #f8f9fa; border-right: 2px solid #ddd; border-bottom: 2px solid #ddd; }
+            .zoom-control {
+              position: fixed;
+              bottom: 20px;
+              right: 20px;
+              background: white;
+              padding: 8px;
+              border-radius: 20px;
+              box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              z-index: 1000;
+            }
+            .zoom-slider {
+              width: 100px;
+              height: 4px;
+              -webkit-appearance: none;
+              background: #e0e0e0;
+              border-radius: 2px;
+              outline: none;
+            }
+            .zoom-slider::-webkit-slider-thumb {
+              -webkit-appearance: none;
+              width: 16px;
+              height: 16px;
+              background: #1a73e8;
+              border-radius: 50%;
+              cursor: pointer;
+              transition: all 0.2s ease;
+            }
+            .zoom-slider::-webkit-slider-thumb:hover {
+              transform: scale(1.2);
+            }
+            .zoom-value {
+              min-width: 45px;
+              color: #666;
+              font-size: 13px;
+              text-align: right;
+            }
           </style>
         </head>
         <body>
@@ -251,6 +290,10 @@ const ExcelImport = ({ uploadHandler }) => {
             <div class="sheet-tabs-bar">${sheetTabs}</div>
             ${sheetContents}
           </div>
+          <div class="zoom-control">
+            <input type="range" class="zoom-slider" min="50" max="200" value="100" id="zoomSlider">
+            <span class="zoom-value" id="zoomValue">100%</span>
+          </div>
           <script>
             function showSheet(idx) {
               var total = ${sheetNames.length};
@@ -260,6 +303,19 @@ const ExcelImport = ({ uploadHandler }) => {
                 document.getElementById('tab-' + i).style.background = (i === idx) ? '#e3f2fd' : '#f5f5f5';
               }
             }
+
+            const zoomSlider = document.getElementById('zoomSlider');
+            const zoomValue = document.getElementById('zoomValue');
+            const tables = document.querySelectorAll('.excel-table');
+            
+            zoomSlider.addEventListener('input', function() {
+              const zoom = this.value;
+              zoomValue.textContent = zoom + '%';
+              tables.forEach(table => {
+                table.style.transform = 'scale(' + (zoom/100) + ')';
+                table.style.transformOrigin = 'top left';
+              });
+            });
           </script>
         </body>
       </html>
